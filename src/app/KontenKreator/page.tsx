@@ -3,7 +3,7 @@ import Footer from "../dashboard/components/Footer";
 
 export default function KontenKreator(){
     return(
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white text-black">
             <Navbar/>
             <h2 className="text-3xl font-bold pl-10 pt-10 pb-5">Konten Kreator</h2>
             <div className="justify-center flex gap-10 mb-6">

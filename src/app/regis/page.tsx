@@ -47,7 +47,7 @@ export default function SignUp(){
     // };
 
     return(
-        <div className="min-h-screen flex flex-col bg-white">
+        <div className="min-h-screen flex flex-col bg-white text-black">
             <h1 className="text-4xl font-bold mb-5 mt-10 text-center">Sign Up</h1>
             <div className="flex-grow flex items-center justify-center p-4">
                 <div className="bg-white rounded-2xl shadow-[0_5px_25px_rgba(0,0,0,0.11)] p-8 max-w-4xl w-full flex">

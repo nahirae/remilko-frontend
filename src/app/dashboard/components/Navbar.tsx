@@ -8,10 +8,25 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
 
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
+  //   setIsLoggedIn(!!token);
+  // }, []);
+
   useEffect(() => {
-    const token = localStorage.getItem('token');
+  const checkAuth = () => {
+    const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
+  };
+
+  checkAuth();
+  window.addEventListener("storage", checkAuth);
+
+  return () => {
+    window.removeEventListener("storage", checkAuth);
+  };
   }, []);
+
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,11 +43,11 @@ export default function Navbar() {
         </h1>
       </Link>
 
-      <div className="flex items-center gap-6">
+      <div className="flex text-black items-center gap-6">
         <Link href="/dashboard">Home</Link>
         <Link href="/Recipes">Recipes</Link>
         <Link href="/Contact">Contact</Link>
-        <Link href="#">About us</Link>
+        <Link href="/AboutUs">About us</Link>
       </div>
 
       <div className="flex items-center justify-center text-center">
@@ -43,7 +58,7 @@ export default function Navbar() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari Resep, Bahan Masakan, Konten Kreator..."
-              className="text-sm ml-4 w-96 focus:outline-none"
+              className="text-sm text-black ml-4 w-96 focus:outline-none"
             />
             <button className="bg-[#608BC1] text-white px-6 py-2 rounded-xl hover:bg-[#6282a9]">
               Search
@@ -54,9 +69,9 @@ export default function Navbar() {
 
       <div className="flex items-center gap-4">
         {isLoggedIn ? (
-          <Link href="/profile">
+          <Link href="/Profile">
             <img
-              src="/asset/profile.png" // pastikan file ini ada di public/asset/
+              src="/asset/profile.png"
               alt="Profile"
               className="w-10 h-10 rounded-full border cursor-pointer"
             />

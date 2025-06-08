@@ -1,11 +1,17 @@
 import { ThumbsUp, Share2 } from "lucide-react";
+import Link from "next/link";
 
 export default function PreviewRecook(){
     return(
         <div className="min-h-screen bg-white" >
             <hr className="bg-blue-900 w-3xl border-none rounded h-1 ml-10 mt-10" />
-            <h2 className="ml-10 mt-5 font-bold text-2xl">Recook</h2>
-            <button className="px-6 py-3 bg-blue-900 text-white rounded-xl ml-10 mt-5">Bagikan Hasil Recookmu</button>
+            <h2 className="ml-10 mt-5 font-bold text-2xl mb-5">Recook</h2>
+            <Link 
+            href='/TambahRecook'
+            className="px-6 py-3 bg-blue-900 text-white rounded-xl ml-10 mt-7"
+            >
+                Bagikan Hasil Recookmu
+            </Link>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-10 ">
                 {[1, 2].map((_, i) => (

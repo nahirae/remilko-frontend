@@ -15,8 +15,8 @@ export default function Footer() {
                     <nav className="space-x-4 mb-2  mt-8">
                     <Link href="/dashboard" className="text-gray-600 hover:text-gray-900">Home</Link>
                     <Link href="/Recipe" className="text-gray-600 hover:text-gray-900">Recipes</Link>
-                    <Link href="/contact" className="text-gray-600 hover:text-gray-900">Contact</Link>
-                    <Link href="/about" className="text-gray-600 hover:text-gray-900">About us</Link>
+                    <Link href="/Contact" className="text-gray-600 hover:text-gray-900">Contact</Link>
+                    <Link href="/About" className="text-gray-600 hover:text-gray-900">About us</Link>
                     </nav>
 
                     {/* <div className="space-x-4 pt-7 mb-2">

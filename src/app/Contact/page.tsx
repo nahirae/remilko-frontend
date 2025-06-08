@@ -5,7 +5,7 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Navbar />
-      <h2 className="mt-10 mb-10 font-bold text-4xl text-center">Kontak Kami</h2>
+      <h2 className="mt-10 mb-10 font-bold text-4xl text-black text-center">Kontak Kami</h2>
       <div className="flex flex-col md:flex-row justify-center items-start gap-10 px-10">
         <div className="w-full md:w-1/3 flex justify-center">
           <img
@@ -24,7 +24,7 @@ export default function Contact() {
               type="text"
               placeholder="Nama Anda..."
               required
-              className="w-full p-3 border border-gray-300 rounded-md"
+              className="w-full p-3 border text-black border-gray-300 rounded-md"
             />
           </div>
 
@@ -36,7 +36,7 @@ export default function Contact() {
               type="email"
               placeholder="Alamat Email Anda..."
               required
-              className="w-full p-3 border border-gray-300 rounded-md"
+              className="w-full p-3 border text-black border-gray-300 rounded-md"
             />
           </div>
 
@@ -48,7 +48,7 @@ export default function Contact() {
               type="text"
               placeholder="Subjek..."
               required
-              className="w-full p-3 border border-gray-300 rounded-md"
+              className="w-full p-3 border text-black border-gray-300 rounded-md"
             />
           </div>
 
@@ -60,7 +60,7 @@ export default function Contact() {
               type="text"
               placeholder="Pertanyaan..."
               required
-              className="w-full p-3 border border-gray-300 rounded-md"
+              className="w-full p-3 border text-black border-gray-300 rounded-md"
             />
           </div>
 
@@ -72,7 +72,7 @@ export default function Contact() {
               placeholder="Tulis Pesan Anda..."
               required
               rows="4"
-              className="w-full p-3 border border-gray-300 rounded-md"
+              className="w-full p-3 border text-black border-gray-300 rounded-md"
             />
           </div>
 

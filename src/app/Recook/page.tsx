@@ -4,7 +4,7 @@ import { ThumbsUp, Share2 } from "lucide-react";
 
 export default function Recook(){
     return(
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-white text-black">
             <Navbar/>
             <h2 className="text-3xl font-bold pl-10 pt-10 pb-5">Semua Hasil Recook</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-center pl-10 pt-10">
