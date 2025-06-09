@@ -28,7 +28,7 @@ export default function SignUp(){
                 <div className="w-1/2 flex items-center justify-center">
                     <div className="text-center">
                     <img
-                        src="/img1.jpg"
+                        src="/img/img1.jpg"
                         alt="Recipe Illustration"
                         className="mx-auto mb-4"
                     />
