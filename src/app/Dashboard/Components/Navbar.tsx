@@ -29,7 +29,7 @@ export default function Navbar() {
       </Link>
 
       <div className="flex items-center gap-6">
-        <Link href="/dashboard">Home</Link>
+        <Link href="/Dashboard">Home</Link>
         <Link href="/Recipes">Recipes</Link>
         <Link href="/Contact">Contact</Link>
         <Link href="/AboutUs">About us</Link>

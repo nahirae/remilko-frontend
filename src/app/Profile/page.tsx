@@ -54,7 +54,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-gray-50 flex flex-col text-black">
       <Navbar />
       <h1 className="text-4xl font-bold mb-5 mt-10 text-center">Profile</h1>
       <div className="flex-grow flex items-center justify-center p-4">
@@ -127,10 +127,10 @@ export default function Profile() {
 
               <div className="flex space-x-4 mt-10">
                 <Link
-                  href="/Recook"
+                  href="/ResepSaya"
                   className="w-1/2 bg-[#608BC1] text-white py-2 rounded-lg hover:bg-[#6282a9] text-center"
                 >
-                  Recook Saya
+                  Resep Saya
                 </Link>
                 <Link
                   href="/Bookmark"
