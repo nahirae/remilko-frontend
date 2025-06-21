@@ -3,25 +3,44 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FaUser, FaLock } from 'react-icons/fa';
+import axios from 'axios';
+
+import Footer from '@/components/Footer';
 
 export default function AdminSignInPage() {
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [msg, setMsg] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setMsg('');
+    try{
+        const res = await axios.post('http://127.0.0.1:8000/api/login', {
+            "username": username,
+            "password": password,
+        },{
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: "application/json",
+            }
+        });
 
-    // Validasi sederhana atau simulasikan login berhasil
-    if (username && password) {
-      router.push('/dashboard');
-    } else {
-      alert('Silakan isi Username dan Password');
+        console.log( alert('Berhasil Login: '), res.data);
+        if (res.data.token) {
+            localStorage.setItem('token', res.data.token);
+        }
+        router.push('/dashboard');
+    } catch(err: any){
+        const errorMessage = err.response?.data?.message || alert('Terjadi kesalahan saat login.');
+        console.error('Error: ', err.response?.data || err.message);
+        setMsg(errorMessage);
     }
-  };
+};
 
   return (
-    <main className="min-h-screen flex flex-col justify-between bg-gray-50">
+    <main className="min-h-screen flex flex-col justify-between bg-gray-50 text-black">
       <div className="max-w-5xl mx-auto w-full px-4 py-12">
         <h1 className="text-3xl font-bold text-center mb-10">Sign In Admin</h1>
 
@@ -72,6 +91,7 @@ export default function AdminSignInPage() {
           </div>
         </div>
       </div>
+      <Footer />
     </main>
   );
 }
