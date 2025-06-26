@@ -1,10 +1,24 @@
 import { postNoAuth, postAuth, getAuth, putAuth } from './api';
 
 interface User {
-  id: number;
+  id: string;
   name: string;
   email: string;
   role: string;
+  created_at: string;
+  updated_at: string;
+  photo_user: string | null;
+}
+
+interface ProfileResponse {
+  data: {
+    user: User[];
+  };
+  meta: {
+    code: number;
+    status: string;
+    message: string;
+  };
 }
 
 interface AuthResponse {
@@ -48,7 +62,11 @@ export const logout = async (): Promise<void> => {
 };
 
 export const getProfile = async (): Promise<User> => {
-  return await getAuth('/profile');
+  const response = await getAuth<ProfileResponse>('/profile');
+  if (!response.data.user || response.data.user.length === 0) {
+    throw new Error('No user data found');
+  }
+  return response.data.user[0];
 };
 
 export const putProfile = async (): Promise<User> => {

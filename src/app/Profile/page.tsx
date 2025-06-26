@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Navbar from '../dashboard/components/Navbar';
 import Footer from '../dashboard/components/Footer';
 import { SquarePen } from 'lucide-react';
-import { getProfile, putProfile, updateProfile, logout } from '@/lib/auth';
+import { getProfile, updateProfile, logout } from '@/lib/auth';
 
 interface FormData {
   username: string;
@@ -34,7 +34,7 @@ export default function Profile() {
       }
 
       try {
-        const user = await putProfile();
+        const user = await getProfile();
         console.log('Fetched user:', user); // Debug
         setFormData({
           username: user.name,
@@ -120,7 +120,7 @@ export default function Profile() {
           <div className="w-1/2 relative flex items-center justify-center">
             <div className="text-center">
               <img
-                src="/asset/profile.png"
+                src={formData.photo_user || '/asset/profile.png'} // Fallback jika photo_user null
                 alt="Profile Illustration"
                 className="mx-auto mb-4 w-64 rounded-full border"
               />
@@ -176,19 +176,19 @@ export default function Profile() {
                   className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
                 />
               </div>
-              {editable && (
+              {/* {editable && (
                 <button
                   type="submit"
-                  className="w-full p-2 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 text-center"
+                  className="w-full p-2 bg-blue-700 text-white py-2 rounded-lg hover:bg-blue-800 text-center"
                 >
                   Simpan Perubahan
                 </button>
-              )}
+              )} */}
               <div className="flex space-x-4 mt-10">
-                <Link href="/recook" className="w-1/2 bg-[#608BC1] text-white py-2 rounded-lg hover:bg-[#6282a9] text-center">
+                <Link href="/Recook" className="w-1/2 bg-[#608BC1] text-white py-2 rounded-lg hover:bg-[#6282a9] text-center">
                   Recook Saya
                 </Link>
-                <Link href="/bookmark" className="w-1/2 bg-[#608BC1] text-white py-2 rounded-lg text-center hover:bg-[#6282a9]">
+                <Link href="/Bookmark" className="w-1/2 bg-[#608BC1] text-white py-2 rounded-lg text-center hover:bg-[#6282a9]">
                   Bookmark
                 </Link>
               </div>

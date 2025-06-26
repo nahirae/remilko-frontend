@@ -8,7 +8,7 @@ const api = axios.create({
   },
 });
 
-// Ambil token dari localStorage
+// Fungsi untuk mendapatkan token dari localStorage dengan aman
 const getToken = () => {
   if (typeof window !== "undefined") {
     return localStorage.getItem("token");
@@ -16,7 +16,7 @@ const getToken = () => {
   return null;
 };
 
-// Interceptor: Tambahkan token otomatis jika ada
+// Interceptor untuk menyisipkan token ke setiap request secara otomatis
 api.interceptors.request.use((config) => {
   const token = getToken();
   if (token) {
@@ -25,26 +25,25 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Fungsi reusable request
-export const apiRequest = async (method, url, data = null, isAuth = false, config = {}) => {
+// Fungsi request generik yang menangani error dan cache
+export const apiRequest = async (method: string, url: string, data: any = null, isAuth: boolean = false, config: any = {}) => {
   try {
-    const headers = {
-      ...config.headers,
-    };
+    const finalConfig = { ...config };
+    // Paksa request GET untuk selalu mengambil data baru dari server (mencegah cache)
+    if (method.toLowerCase() === 'get') {
+      finalConfig.cache = 'no-store';
+    }
 
-    // Jika butuh Auth manual
     if (isAuth) {
       const token = getToken();
-      if (!token) throw new Error("Silakan login terlebih dahulu.");
-      headers.Authorization = `Bearer ${token}`;
+      if (!token) throw new Error("Akses ditolak. Silakan login terlebih dahulu.");
     }
 
     const response = await api({
       method,
       url,
       data,
-      headers,
-      ...config,
+      ...finalConfig,
     });
 
     return response.data;
@@ -52,40 +51,22 @@ export const apiRequest = async (method, url, data = null, isAuth = false, confi
     const status = error.response?.status;
     const message = error.response?.data?.message || error.message;
 
-    // Penanganan token expired
-    if (status === 401 && message.toLowerCase().includes("token")) {
+    // Penanganan token kedaluwarsa
+    if (status === 401) {
       if (typeof window !== "undefined") {
         localStorage.removeItem("token");
-        alert("Sesi login telah habis. Silakan login ulang.");
+        alert("Sesi Anda telah berakhir. Silakan login kembali.");
         window.location.href = "/login";
       }
     }
-
-    console.error(`API Error (${method.toUpperCase()} ${url}):`, error.response?.data || error.message);
+    
+    console.error(`API Error (${method.toUpperCase()} ${url}):`, error.response?.data || error);
     throw new Error(message || "Terjadi kesalahan saat menghubungi server.");
   }
 };
 
-export default api;
-
-// ========== Helper Methods ==========
-
-// GET
-export const getNoAuth = (url, config = {}) => apiRequest("get", url, null, false, config);
-export const getAuth = (url, config = {}) => apiRequest("get", url, null, true, config);
-
-// POST
-export const postNoAuth = (url, data, config = {}) => apiRequest("post", url, data, false, config);
-export const postAuth = (url, data, config = {}) => apiRequest("post", url, data, true, config);
-
-// PUT
-export const putNoAuth = (url, data, config = {}) => apiRequest("put", url, data, false, config);
-export const putAuth = (url, data, config = {}) => apiRequest("put", url, data, true, config);
-
-// PATCH
-export const patchNoAuth = (url, data, config = {}) => apiRequest("patch", url, data, false, config);
-export const patchAuth = (url, data, config = {}) => apiRequest("patch", url, data, true, config);
-
-// DELETE
-export const deleteNoAuth = (url, config = {}) => apiRequest("delete", url, null, false, config);
-export const deleteAuth = (url, config = {}) => apiRequest("delete", url, null, true, config);
+// --- Helper Methods ---
+export const getAuth = (url: string, config = {}) => apiRequest("get", url, null, true, config);
+export const postAuth = (url: string, data: any, config = {}) => apiRequest("post", url, data, true, config);
+export const putAuth = (url: string, data: any, config = {}) => apiRequest("put", url, data, true, config);
+export const deleteAuth = (url: string, config = {}) => apiRequest("delete", url, null, true, config);

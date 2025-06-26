@@ -1,25 +1,25 @@
 import { getAuth } from './api';
 
 export interface RecipeStep {
-  id: number;
+  id: string; // ID juga sebaiknya string untuk konsistensi
   step_number: number;
   description: string;
 }
 
 export interface RecipeIngredient {
-  id: number;
+  id: string;
   name: string;
   quantity: string;
 }
 
 export interface RecipeNutrition {
-  id: number;
+  id: string;
   nutrient: string;
   value: string;
 }
 
 export interface RecipeTool {
-  id: number;
+  id: string;
   name: string;
 }
 
@@ -27,36 +27,25 @@ export interface Recipe {
   id: string;
   title: string;
   description: string;
+  photo: string;
   rating: number;
-  price_estimate: number;
   cook_time: number;
   portion_size: string;
   category: string | null;
-  label: string;
-  photo: string;
-  url_video: string;
+  label: string | null;
   created_at: string;
-  updated_at: string;
-  user?: string;
-  profile?: string;
-}
-
-interface RecipesResponse {
-  data: {
-    recipes: Recipe[];
+  user: {
+    id: string;
+    name: string;
+    photo_user: string | null;
+    profile?: string;
   };
-  meta: {
-    code: number;
-    status: string;
-    message: string;
-    pagination: {
-      total: number;
-      count: number;
-      per_page: number;
-      current_page: number;
-      total_pages: number;
-    };
-  };
+  ingredients?: any[];
+  tools?: any[];
+  nutrition?: any[];
+  steps?: any[];
+  recooks?: any[];
+  comments?: any[];
 }
 
 export interface Pagination {
@@ -67,49 +56,86 @@ export interface Pagination {
   total_pages: number;
 }
 
-// Dapatkan semua resep (dengan pagination)
-export const getRecipes = async (
-  page: number = 1
-): Promise<{ recipes: Recipe[]; pagination: Pagination }> => {
-  const response = await getAuth<RecipesResponse>(`/user/recipes?page=${page}`);
+interface RecipesResponse {
+  data: {
+    recipes: Recipe[];
+  };
+  meta: {
+    pagination: Pagination;
+  };
+}
+export interface RecipeFilters {
+  page?: number;
+  category?: string | null;
+  ingredients?: string[];
+}
+
+export const getRecipes = async (page: number = 1, category?: string | null): Promise<{ recipes: Recipe[]; pagination: Pagination }> => {
+  try {
+    let url = `/user/recipes?page=${page}`;
+    if (category) {
+      url += `&category=${encodeURIComponent(category)}`;
+    }
+
+    const response = await getAuth<RecipesResponse>(url);
+
+    return {
+      recipes: response.data.recipes,
+      pagination: response.meta.pagination,
+    };
+  } catch (error) {
+    console.error(`Gagal mengambil resep (page: ${page}, category: ${category}):`, error);
+    throw error;
+  }
+};
+
+export const getFilteredRecipes = async (filters: RecipeFilters = {}, page: number = 1) => {
+  const params = new URLSearchParams();
+  params.append("page", page.toString());
+
+  if (filters.category) {
+    params.append("category", filters.category);
+  }
+
+  if (filters.ingredients && filters.ingredients.length > 0) {
+    filters.ingredients.forEach((ing) => {
+      params.append("recipeIngredient", ing);
+    });
+  }
+
+
+  if (filters.page) params.append('page', filters.page.toString());
+
+  const response = await getAuth(`/user/recipes/filters?${params.toString()}`);
+
+  // return response.data.recipes ? response.data.recipes : [];
   return {
-    recipes: response.data.recipes,
+    recipes: response.data,
     pagination: response.meta.pagination,
   };
 };
 
-// Filter resep (kategori, dll)
-export const getFilteredRecipes = async (
-  filters: { category?: string },
-  page: number = 1
-): Promise<Recipe[]> => {
-  const response = await getAuth<RecipesResponse>('/user/recipes/filters', {
-    params: { ...filters, page },
-  });
-  return response.data.recipes;
+export const getRecipeById = async (id: string): Promise<{ recipe: Recipe }> => {
+  const response = await getAuth(`/user/recipes/${id}`);
+  return response.data;
 };
 
-// Detail resep berdasarkan ID
-export const getRecipeById = async (id: number): Promise<Recipe> => {
-  return await getAuth<Recipe>(`/user/recipes/${id}`);
+export const getRecipeSteps = async (recipeId: string): Promise<RecipeStep[]> => {
+    const response = await getAuth<{ data: RecipeStep[] }>(`/user/recipes/${recipeId}/steps`);
+    return response.data;
 };
 
-// Langkah memasak
-export const getRecipeSteps = async (recipeId: number): Promise<RecipeStep[]> => {
-  return await getAuth<RecipeStep[]>(`/user/recipes/${recipeId}/steps`);
+export const getRecipeIngredients = async (recipeId: string): Promise<RecipeIngredient[]> => {
+    const response = await getAuth<{ data: RecipeIngredient[] }>(`/user/recipes/${recipeId}/ingredients`);
+    return response.data;
 };
 
-// Bahan-bahan resep
-export const getRecipeIngredients = async (recipeId: number): Promise<RecipeIngredient[]> => {
-  return await getAuth<RecipeIngredient[]>(`/user/recipes/${recipeId}/ingredients`);
+export const getRecipeNutritions = async (recipeId: string): Promise<RecipeNutrition[]> => {
+    const response = await getAuth<{ data: RecipeNutrition[] }>(`/user/recipes/${recipeId}/nutritions`);
+    return response.data;
 };
 
-// Informasi gizi
-export const getRecipeNutritions = async (recipeId: number): Promise<RecipeNutrition[]> => {
-  return await getAuth<RecipeNutrition[]>(`/user/recipes/${recipeId}/nutritions`);
-};
-
-// Alat yang digunakan
-export const getRecipeTools = async (recipeId: number): Promise<RecipeTool[]> => {
-  return await getAuth<RecipeTool[]>(`/user/recipes/${recipeId}/tools`);
+export const getRecipeTools = async (recipeId: string): Promise<RecipeTool[]> => {
+    const response = await getAuth<{ data: RecipeTool[] }>(`/user/recipes/${recipeId}/tools`);
+    return response.data;
 };
