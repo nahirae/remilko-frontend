@@ -71,7 +71,7 @@ export default function Navbar() {
 
   return (
     <nav className="flex items-center justify-between px-6 py-4 bg-white shadow-sm relative">
-      <Link href="/dashboard" legacyBehavior>
+      <Link href="/dashboard">
         <h1 className="text-2xl font-bold text-gray-900">
           Remilko<span className="text-orange-500">.</span>
         </h1>
@@ -142,7 +142,7 @@ export default function Navbar() {
       </div>
       <div className="flex items-center gap-4">
         {isLoggedIn ? (
-          <Link href="/Profile" legacyBehavior>
+          <Link href="/Profile">
             <img
               src="/asset/profile.png"
               alt="Profile"

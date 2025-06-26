@@ -165,6 +165,7 @@ export default function Recipes() {
                       id={r.id}
                       title={r.title}
                       image={r.photo}
+                      user={r.user || "Konten Kreator"}
                       cook_time={r.cook_time}
                       label={r.label}
                       rating={r.rating}

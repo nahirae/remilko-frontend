@@ -182,7 +182,7 @@ export default function Recipes() {
             key={cat.id}
             href={`/RecipeAll?category=${encodeURIComponent(cat.category_name)}`}
             className="flex flex-col items-center gap-3 group"
-            legacyBehavior>
+            >
             <div className="w-24 h-24 bg-white rounded-xl shadow p-2 flex items-center justify-center hover:shadow-lg transition-shadow">
               <img src={`/asset/${cat.photo_category}`} alt={cat.category_name} className="w-full h-full object-contain" />
             </div>
