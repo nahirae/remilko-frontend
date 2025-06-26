@@ -126,7 +126,6 @@ export default function Recipes() {
           />
         ))}
       </div>
-
       <div className="m-2 mt-16 rounded-xl bg-blue-50">
         <div className="flex flex-col lg:flex-row items-center justify-between">
           <div className="max-w-xl p-8 lg:pl-10">
@@ -144,7 +143,6 @@ export default function Recipes() {
           <img src="/asset/cook.png" alt="Cooking illustration" className="w-full max-w-md lg:w-[500px]" />
         </div>
       </div>
-
       <div className="flex items-center justify-between mb-6 mt-10">
         <div>
           <h2 className="text-3xl font-bold">Explore Resep Enak Andalanmu</h2>
@@ -172,7 +170,6 @@ export default function Recipes() {
           />
         ))}
       </div>
-
       <div className="flex items-center text-center justify-center mt-20">
         <div>
           <h2 className="text-3xl font-bold">Kategori Resep</h2>
@@ -185,7 +182,7 @@ export default function Recipes() {
             key={cat.id}
             href={`/RecipeAll?category=${encodeURIComponent(cat.category_name)}`}
             className="flex flex-col items-center gap-3 group"
-          >
+            legacyBehavior>
             <div className="w-24 h-24 bg-white rounded-xl shadow p-2 flex items-center justify-center hover:shadow-lg transition-shadow">
               <img src={`/asset/${cat.photo_category}`} alt={cat.category_name} className="w-full h-full object-contain" />
             </div>
@@ -193,7 +190,6 @@ export default function Recipes() {
           </Link>
         ))}
       </div>
-
       <div className="flex items-center justify-between mt-20">
         <div>
           <h2 className="text-3xl font-bold">Resep Dari Konten Kreator</h2>
@@ -221,7 +217,6 @@ export default function Recipes() {
           </div>
         ))}
       </div>
-
       <div className="flex items-center justify-between mt-20">
         <div>
           <h2 className="text-3xl font-bold">Hasil Recook Resep</h2>
@@ -242,7 +237,7 @@ export default function Recipes() {
       </div>
       <div className="flex items-center gap-1 text-yellow-500 text-sm">
         {Array(5).fill(null).map((_, idx) => (
-          <span key={idx}>{idx < 4 ? "★" : "☆"}</span> // Opsional: sesuaikan dengan rating jika ada
+          (<span key={idx}>{idx < 4 ? "★" : "☆"}</span>) // Opsional: sesuaikan dengan rating jika ada
         ))}
       </div>
       <p className="text-sm text-gray-700 mt-2">“{recook.description || 'Recook ini belum ada deskripsi.'}”</p>

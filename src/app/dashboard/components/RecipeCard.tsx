@@ -76,7 +76,7 @@ export default function RecipeCard({
     <Link
       href={`/DetailResep/${id}`}
       className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 w-full max-w-[9.7cm] block cursor-pointer group"
-    >
+      legacyBehavior>
       <div className="relative overflow-hidden rounded-t-xl">
         <img
           src={image}

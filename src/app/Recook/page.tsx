@@ -77,7 +77,10 @@ export default function Recook() {
                     </div>
                   </div>
                   
-                  <Link href={`/DetailResep/${recook.recipe.id}`} className="block mb-3 p-2 bg-white rounded-lg border hover:bg-gray-100 transition-colors">
+                  <Link
+                    href={`/DetailResep/${recook.recipe.id}`}
+                    className="block mb-3 p-2 bg-white rounded-lg border hover:bg-gray-100 transition-colors"
+                    legacyBehavior>
                     <p className="font-bold text-sm text-blue-800 truncate">{recook.recipe.title}</p>
                   </Link>
                   
