@@ -31,7 +31,7 @@ export default function SignUp(){
             if (res.data.token) {
                 localStorage.setItem('token', res.data.token);
             }
-            router.push('/dashboard');
+            router.push('/Dashboard');
         } catch(err: any){
             const errorMessage = err.response?.data?.message || alert('Terjadi kesalahan saat registrasi.');
             console.error('Error: ', err.response?.data || err.message);
@@ -107,21 +107,6 @@ export default function SignUp(){
                         </Link>
                     </div>
                     </form>
-
-                    {/* <div className="flex items-center my-4">
-                        <hr className="flex-grow border-gray-300" />
-                        <span className="px-2 text-gray-500">Atau</span>
-                        <hr className="flex-grow border-gray-300" />
-                    </div>
-
-                    <div className="flex justify-center space-x-4">
-                        <button className="p-2 border border-gray-300 rounded-full hover:bg-gray-100">
-                            <img src="https://via.placeholder.com/24?text=F" alt="Facebook" />
-                        </button>
-                        <button className="p-2 border border-gray-300 rounded-full hover:bg-gray-100">
-                            <img src="https://via.placeholder.com/24?text=G" alt="Google" />
-                        </button>
-                    </div> */}
                 </div>
                 </div>
             </div>

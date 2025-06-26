@@ -1,57 +1,115 @@
-"use client";
-import Navbar from "../Dashboard/Components/Navbar";
-import Footer from "../Dashboard/Components/Footer";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import axios from "axios";
-import { useState } from "react";
-import { SquarePen } from "lucide-react";
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Navbar from '../Dashboard/Components/Navbar';
+import Footer from '../Dashboard/Components/Footer';
+import { SquarePen } from 'lucide-react';
+import { getProfile, updateProfile, logout } from '@/lib/auth';
+
+interface FormData {
+  username: string;
+  name: string;
+  email: string;
+}
 
 export default function Profile() {
   const router = useRouter();
-  const [msg, setMsg] = useState("");
+  const [msg, setMsg] = useState('');
   const [editable, setEditable] = useState(false);
-  const [formData, setFormData] = useState({
-    username: "hiraetna",
-    name: "Naya Nasywa",
-    email: "naya@example.com",
+  const [formData, setFormData] = useState<FormData>({
+    username: '',
+    name: '',
+    email: '',
   });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.push('/login');
+        return;
+      }
+
+      try {
+        const user = await getProfile();
+        console.log('Fetched user:', user);
+        setFormData({
+          username: user.name,
+          name: user.name,
+          email: user.email,
+        });
+      } catch (err: any) {
+        console.error('Fetch profile error:', err);
+        if (err.response?.status === 401) {
+          router.push('/login');
+        } else {
+          setMsg('Gagal mengambil profil. Silakan coba lagi.');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProfile();
+  }, [router]);
 
   const handleLogout = async () => {
-    setMsg("");
+    setMsg('');
     try {
-      await axios.post(
-        "http://127.0.0.1:8000/api/logout",
-        {},
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-
-      localStorage.removeItem("token");
-      setMsg("Berhasil Logout!");
-      setTimeout(() => {
-        router.push("/login");
-      }, 1000);
-    } catch (err) {
-      console.error("Error logout: ", err.response?.data || err.message);
-      setMsg("Gagal logout. Silakan coba lagi.");
+      await logout();
+      setMsg('Berhasil Logout!');
+      router.push('/login');
+    } catch (err: any) {
+      console.error('Logout error:', err);
+      setMsg('Gagal logout. Silakan coba lagi.');
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editable) return;
+
+    try {
+      const updatedUser = await updateProfile({
+        name: formData.username,
+        email: formData.email,
+      });
+      setFormData({
+        username: updatedUser.name,
+        name: updatedUser.name,
+        email: updatedUser.email,
+      });
+      setEditable(false);
+      setMsg('Profil berhasil diperbarui!');
+    } catch (err: any) {
+      console.error('Update profile error:', err);
+      setMsg('Gagal memperbarui profil. Silakan coba lagi.');
+    }
+  };
+
   const toggleEdit = () => {
     setEditable(!editable);
+    if (editable) {
+      setMsg('');
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center text-black">
+        <p>Loading profile...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col text-black">
@@ -62,7 +120,7 @@ export default function Profile() {
           <div className="w-1/2 relative flex items-center justify-center">
             <div className="text-center">
               <img
-                src="/asset/profile.png"
+                src={formData.photo_user || '/asset/profile.png'}
                 alt="Profile Illustration"
                 className="mx-auto mb-4 w-64 rounded-full border"
               />
@@ -84,11 +142,9 @@ export default function Profile() {
           </div>
 
           <div className="w-1/2 p-4">
-            <form className="space-y-4 p-7">
+            <form onSubmit={handleSubmit} className="space-y-4 p-7">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  USERNAME
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">USERNAME</label>
                 <input
                   type="text"
                   name="username"
@@ -99,9 +155,7 @@ export default function Profile() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  NAMA
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">NAMA</label>
                 <input
                   type="text"
                   name="name"
@@ -112,9 +166,7 @@ export default function Profile() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  EMAIL
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">EMAIL</label>
                 <input
                   type="email"
                   name="email"
@@ -126,16 +178,10 @@ export default function Profile() {
               </div>
 
               <div className="flex space-x-4 mt-10">
-                <Link
-                  href="/ResepSaya"
-                  className="w-1/2 bg-[#608BC1] text-white py-2 rounded-lg hover:bg-[#6282a9] text-center"
-                >
-                  Resep Saya
+                <Link href="/Recook" className="w-1/2 bg-[#608BC1] text-white py-2 rounded-lg hover:bg-[#6282a9] text-center">
+                  Recook Saya
                 </Link>
-                <Link
-                  href="/Bookmark"
-                  className="w-1/2 bg-[#608BC1] text-white py-2 rounded-lg text-center hover:bg-[#6282a9]"
-                >
+                <Link href="/Bookmark" className="w-1/2 bg-[#608BC1] text-white py-2 rounded-lg text-center hover:bg-[#6282a9]">
                   Bookmark
                 </Link>
               </div>
@@ -143,7 +189,11 @@ export default function Profile() {
           </div>
         </div>
       </div>
-
+      {msg && (
+        <p className={`text-center mt-4 ${msg.includes('Gagal') ? 'text-red-500' : 'text-green-500'}`}>
+          {msg}
+        </p>
+      )}
       <Footer />
     </div>
   );

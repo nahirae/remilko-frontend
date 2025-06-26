@@ -16,7 +16,7 @@ const router = useRouter();
         setMsg('');
         try{
             const res = await axios.post('http://127.0.0.1:8000/api/login', {
-                "name": name,
+                "username": name,
                 "password": password,
             },{
                 headers: {
@@ -29,7 +29,7 @@ const router = useRouter();
             if (res.data.token) {
                 localStorage.setItem('token', res.data.token);
             }
-            router.push('/dashboard');
+            router.push('/Dashboard');
         } catch(err: any){
             const errorMessage = err.response?.data?.message || alert('Terjadi kesalahan saat login.');
             console.error('Error: ', err.response?.data || err.message);
