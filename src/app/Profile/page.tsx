@@ -12,6 +12,7 @@ interface FormData {
   username: string;
   name: string;
   email: string;
+  photo_user: "/asset/profile.png";
 }
 
 export default function Profile() {
@@ -22,6 +23,7 @@ export default function Profile() {
     username: '',
     name: '',
     email: '',
+    photo_user: '/asset/profile.png',
   });
   const [loading, setLoading] = useState(true);
 
@@ -40,6 +42,7 @@ export default function Profile() {
           username: user.name,
           name: user.name,
           email: user.email,
+          photo_user: '/asset/profile.png',
         });
       } catch (err: any) {
         console.error('Fetch profile error:', err);
@@ -87,6 +90,7 @@ export default function Profile() {
         username: updatedUser.name,
         name: updatedUser.name,
         email: updatedUser.email,
+        photo_user: "/asset/profile.png",
       });
       setEditable(false);
       setMsg('Profil berhasil diperbarui!');
