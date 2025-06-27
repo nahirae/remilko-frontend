@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from 'next/link';
 import { Timer, Bookmark, BookmarkCheck, Flame, Utensils, Loader2 } from "lucide-react";
 import { addFavorite, removeFavorite } from "@/lib/favorites";
+import { getPublicRecipeNutritions } from "@/lib/nutrition";
 import toast from "react-hot-toast";
 
 type Props = {
@@ -36,13 +37,35 @@ export default function RecipeCard({
 }: Props) {
   const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
   const [isBookmarking, setIsBookmarking] = useState(false);
+  const [displayCalories, setDisplayCalories] = useState(calories);
   const router = useRouter();
+
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchCalories = async () => {
+      try {
+        const nutritions = await getPublicRecipeNutritions(id);
+        
+        const calorieData = nutritions.find(n => n.nutrition_name.toLowerCase() === 'kalori');
+
+        if (calorieData) {
+          setDisplayCalories(calorieData.nutrition_value);
+        }
+      } catch (error) {
+        console.error(`Gagal mengambil kalori untuk resep ${id}`, error);
+      }
+    };
+    
+    fetchCalories();
+  }, [id]);
 
   useEffect(() => {
     setIsBookmarked(initialIsBookmarked);
   }, [initialIsBookmarked]);
 
   const handleBookmark = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    // Mencegah navigasi saat tombol bookmark di-klik
     e.stopPropagation(); 
     e.preventDefault();
 
@@ -75,7 +98,7 @@ export default function RecipeCard({
     <Link
       href={`/DetailResep/${id}`}
       className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 w-full max-w-[9.7cm] block cursor-pointer group"
-    >
+      >
       <div className="relative overflow-hidden rounded-t-xl">
         <img
           src={image}
@@ -89,7 +112,7 @@ export default function RecipeCard({
         <div className="flex items-center justify-between mt-2 text-gray-700 text-sm gap-2">
           <div className="flex gap-1.5 items-center"><Timer className="w-4 h-4" /><span>{cook_time} menit</span></div>
           <div className="flex gap-1.5 items-center"><Utensils className="w-4 h-4" /><span>{label || "Umum"}</span></div>
-          <div className="flex gap-1.5 items-center"><Flame className="w-4 h-4" /><span>{calories} Cals</span></div>
+          <div className="flex gap-1.5 items-center"><Flame className="w-4 h-4" /><span>{displayCalories} Cals</span></div>
         </div>
 
         <div className="flex items-center justify-between mt-4">

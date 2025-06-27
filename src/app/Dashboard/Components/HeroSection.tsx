@@ -14,9 +14,14 @@ export default function HeroSection() {
           </p>
           <p className="text-gray-600 mt-10">Modal Receh Hasilnya Premium - Resep Jitu Anak Kos!</p>
           <p className="text-gray-600">Masak Itu Gampang! Yuk Explor Ribuan Resep Menarik di Remilko.</p>
-          <Link href="/RecipeAll" className="flex mt-10 w-48 gap-3 px-6 py-3 bg-[#608BC1] text-white rounded-xl mb-5 hover:bg-[#6282a9]">
-            <span>Explore Resep </span>
-            <CircleChevronRight className='w-6 h-6'/>
+          <Link
+            href="/RecipeAll"
+            className="mb-5 mt-10 inline-block"
+            >
+              <div className='flex items-center justify-center w-48 gap-3 px-6 py-3 bg-[#608BC1] text-white rounded-xl hover:bg-[#6282a9]'>
+                <span>Explore Resep </span>
+                <CircleChevronRight className='w-6 h-6'/>
+              </div>
           </Link>
         
         </div>

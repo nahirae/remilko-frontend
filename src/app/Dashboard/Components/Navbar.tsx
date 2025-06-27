@@ -76,14 +76,12 @@ export default function Navbar() {
           Remilko<span className="text-orange-500">.</span>
         </h1>
       </Link>
-
       <div className="flex text-black items-center gap-6">
         <Link href="/Dashboard">Home</Link>
-        <Link href="/Recipes">Recipes</Link>
+        <Link href="/ResepSaya">My Recipe</Link>
         <Link href="/Contact">Contact</Link>
         <Link href="/AboutUs">About us</Link>
       </div>
-
       <div className="flex items-center justify-center text-center relative">
         <form onSubmit={handleSubmit}>
           <div className="flex bg-white w-lg p-1 border border-gray-200 rounded-xl justify-between">
@@ -142,7 +140,6 @@ export default function Navbar() {
           </div>
         )}
       </div>
-
       <div className="flex items-center gap-4">
         {isLoggedIn ? (
           <Link href="/Profile">

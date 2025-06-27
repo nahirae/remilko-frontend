@@ -16,15 +16,29 @@ export interface FavoriteRecipe {
   };
 }
 
-export const getFavorites = async (): Promise<FavoriteRecipe[]> => {
-  const res = await getAuth("/user/favorites");
-  return res.data;
+export async function addFavorite(recipeId: number) {
+  return await postAuth('/creator/favorites', { recipe_id: recipeId });
+}
+
+export async function removeFavorite(recipeId: number) {
+  return await deleteAuth(`/creator/favorites/${recipeId}`);
+}
+
+// export const getFavorites = async (): Promise<Favorite[]> => {
+//   return await getAuth('/creator/favorites');
+// };
+
+export const getFavorites = async (): Promise<any[]> => {
+  try {
+    const res = await getAuth("/user/favorites");
+    return res.data || [];
+  } catch (err) {
+    return [];
+  }
 };
 
-export const addFavorite = async (recipeId: string): Promise<void> => {
-  await postAuth(`/user/recipes/${recipeId}/favorites`, {});
+export const checkFavorite = async (recipeId: number): Promise<boolean> => {
+  const response = await postAuth('/creator/favorites/check', { recipe_id: recipeId });
+  return response.is_favorited;
 };
 
-export const removeFavorite = async (recipeId: string): Promise<void> => {
-  await deleteAuth(`/user/recipes/${recipeId}/favorites`);
-};

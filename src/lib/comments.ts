@@ -22,7 +22,7 @@ interface SingleCommentApiResponse {
     data: Comment;
 }
 
-export const getCommentsForCreator = async (recipeId: string): Promise<Comment[]> => {
+export const getComments = async (recipeId: string): Promise<Comment[]> => {
   if (!recipeId) return [];
   try {
     const url = `/creator/recipes/${recipeId}/comments`;
@@ -34,19 +34,19 @@ export const getCommentsForCreator = async (recipeId: string): Promise<Comment[]
   }
 };
 
-export const postCommentAsCreator = async (recipeId: string, comment_text: string): Promise<Comment> => {
+export const postComment = async (recipeId: string, comment_text: string): Promise<Comment> => {
   const url = `/creator/recipes/${recipeId}/comments`;
   const response = await postAuth<SingleCommentApiResponse>(url, { comment_text });
   return response.data;
 };
 
-export const updateCommentAsCreator = async (recipeId: string, commentId: string, comment_text: string): Promise<Comment> => {
+export const updateComment = async (recipeId: string, commentId: string, comment_text: string): Promise<Comment> => {
   const url = `/creator/recipes/${recipeId}/comments/${commentId}`;
   const response = await putAuth<SingleCommentApiResponse>(url, { comment_text });
   return response.data;
 };
 
-export const deleteCommentAsCreator = async (recipeId: string, commentId: string): Promise<void> => {
+export const deleteComment = async (recipeId: string, commentId: string): Promise<void> => {
   const url = `/creator/recipes/${recipeId}/comments/${commentId}`;
   await deleteAuth(url);
 };

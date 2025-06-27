@@ -28,8 +28,9 @@ interface SingleNutritionApiResponse {
 export const getPublicRecipeNutritions = async (recipeId: string): Promise<Nutrition[]> => {
   if (!recipeId) return [];
   try {
-    const response = await getAuth<{ data: Nutrition[] }>(`/user/recipes/${recipeId}/nutritions`);
-    return response.data || [];
+    const response = await getAuth<NutritionsResponse>(`/user/recipes/${recipeId}/nutritions`);    
+    return response.data.nutrition || [];
+
   } catch (error) {
     console.error(`Error fetching nutritions for recipe ${recipeId}:`, error);
     return [];

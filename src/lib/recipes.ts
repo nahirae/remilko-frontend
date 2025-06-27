@@ -65,6 +65,13 @@ interface RecipesResponse {
   };
 }
 
+interface PaginatedRecipesResponse {
+  data: Recipe[];
+  meta: {
+    pagination: Pagination;
+  };
+}
+
 interface SingleRecipeResponse {
   data: Recipe;
 }
@@ -77,7 +84,7 @@ export interface RecipeFilters {
 
 export const getRecipes = async (page: number = 1, category?: string | null): Promise<{ recipes: Recipe[]; pagination: Pagination }> => {
   try {
-    let url = `/user/recipes?page=${page}`;
+    let url = `/creator/recipes?page=${page}`;
     if (category) {
       url += `&category=${encodeURIComponent(category)}`;
     }
@@ -111,7 +118,7 @@ export const getFilteredRecipes = async (filters: RecipeFilters = {}, page: numb
 
   if (filters.page) params.append('page', filters.page.toString());
 
-  const response = await getAuth(`/user/recipes/filters?${params.toString()}`);
+  const response = await getAuth(`/creator/recipes/filters?${params.toString()}`);
 
   // return response.data.recipes ? response.data.recipes : [];
   return {
@@ -121,39 +128,70 @@ export const getFilteredRecipes = async (filters: RecipeFilters = {}, page: numb
 };
 
 export const getRecipeById = async (id: string): Promise<{ recipe: Recipe }> => {
-  const response = await getAuth(`/user/recipes/${id}`);
+  const response = await getAuth(`/creator/recipes/${id}`);
   return response.data;
 };
 
 export const getRecipeSteps = async (recipeId: string): Promise<RecipeStep[]> => {
-    const response = await getAuth<{ data: RecipeStep[] }>(`/user/recipes/${recipeId}/steps`);
+    const response = await getAuth<{ data: RecipeStep[] }>(`/creator/recipes/${recipeId}/steps`);
     return response.data;
 };
 
 export const getRecipeIngredients = async (recipeId: string): Promise<RecipeIngredient[]> => {
-    const response = await getAuth<{ data: RecipeIngredient[] }>(`/user/recipes/${recipeId}/ingredients`);
+    const response = await getAuth<{ data: RecipeIngredient[] }>(`/creator/recipes/${recipeId}/ingredients`);
     return response.data;
 };
 
 export const getRecipeNutritions = async (recipeId: string): Promise<RecipeNutrition[]> => {
-    const response = await getAuth<{ data: RecipeNutrition[] }>(`/user/recipes/${recipeId}/nutritions`);
+    const response = await getAuth<{ data: RecipeNutrition[] }>(`/creator/recipes/${recipeId}/nutritions`);
     return response.data;
 };
 
 export const getRecipeTools = async (recipeId: string): Promise<RecipeTool[]> => {
-    const response = await getAuth<{ data: RecipeTool[] }>(`/user/recipes/${recipeId}/tools`);
+    const response = await getAuth<{ data: RecipeTool[] }>(`/creator/recipes/${recipeId}/tools`);
     return response.data;
 };
 
+export const getPublicRecipes = async (
+  filters: RecipeFilters = {}
+): Promise<{ recipes: Recipe[]; pagination: Pagination }> => {
+  try {
+    const params = new URLSearchParams();
+    
+    if (filters.page) params.append('page', filters.page.toString());
+    if (filters.category) params.append('category', filters.category);
+    if (filters.ingredients && filters.ingredients.length > 0) {
+      filters.ingredients.forEach(ingredient => params.append('ingredients[]', ingredient));
+    }
+
+    const url = `/creator/recipes/filters?${params.toString()}`;
+    
+    const response = await getAuth<PaginatedRecipesResponse>(url);
+    
+    return {
+      recipes: response.data,
+      pagination: response.meta.pagination,
+    };
+  } catch (error) {
+    console.error(`Gagal mengambil resep publik dengan filter:`, filters, error);
+    throw error;
+  }
+};
+
+export const getPublicRecipeById = async (id: string): Promise<Recipe> => {
+  const response = await getAuth<SingleRecipeResponse>(`/creator/recipes/${id}`);
+  return response.data;
+};
+
+
 //creator
 export const getMyCreatorRecipes = async (page: number = 1): Promise<{ recipes: Recipe[]; pagination: Pagination }> => {
-  const response = await getAuth<PaginatedRecipesResponse>(`/creator/recipes?page=${page}`);
+  const response = await getAuth(`/creator/recipes?page=${page}`);
   return {
-    recipes: response.data,
+    recipes: response.data.recipes,
     pagination: response.meta.pagination,
   };
 };
-
 export const getCreatorRecipeById = async (recipeId: string): Promise<Recipe> => {
     const response = await getAuth<SingleRecipeResponse>(`/creator/recipes/${recipeId}`);
     return response.data;
@@ -173,3 +211,4 @@ export const updateRecipe = async (recipeId: string, recipeData: FormData): Prom
 export const deleteRecipe = async (recipeId: string): Promise<void> => {
     await deleteAuth(`/creator/recipes/${recipeId}`);
 };
+
