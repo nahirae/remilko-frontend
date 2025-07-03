@@ -16,28 +16,34 @@ export default function AdminSignInPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMsg('');
-    try{
-        const res = await axios.post('http://127.0.0.1:8000/api/login', {
-            "username": username,
-            "password": password,
-        },{
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: "application/json",
-            }
-        });
 
-        console.log( alert('Berhasil Login: '), res.data);
-        if (res.data.token) {
-            localStorage.setItem('token', res.data.token);
+    try {
+      const res = await axios.post('http://127.0.0.1:8000/api/login', {
+        "username": username,
+        "password": password,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: "application/json",
         }
-        router.push('/dashboard');
-    } catch(err: any){
-        const errorMessage = err.response?.data?.message || alert('Terjadi kesalahan saat login.');
-        console.error('Error: ', err.response?.data || err.message);
-        setMsg(errorMessage);
+      });
+
+      console.log('Berhasil Login: ', res.data);
+
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token);
+      }
+      
+      alert('Berhasil Login!');
+      router.push('/dashboard');
+
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || 'Terjadi kesalahan saat login.';
+      console.error('Error: ', err.response?.data || err.message);
+      setMsg(errorMessage);
+      alert(errorMessage);
     }
-};
+  };
 
   return (
     <main className="min-h-screen flex flex-col justify-between bg-gray-50 text-black">
@@ -73,6 +79,8 @@ export default function AdminSignInPage() {
                 />
               </div>
             </div>
+            
+            {msg && <p className="text-sm text-red-600">{msg}</p>}
 
             <button
               type="submit"
@@ -94,4 +102,4 @@ export default function AdminSignInPage() {
       <Footer />
     </main>
   );
-}
+} 

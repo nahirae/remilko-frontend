@@ -1,23 +1,33 @@
-import { getAuth, postAuth, deleteAuth } from './api';
+import { getAuth, postAuth, deleteAuth } from "./api";
 
-interface Favorite {
-  id: number;
-  recipe_id: number;
+// Tipe untuk data favorit
+export interface FavoriteRecipe {
+  id: string;
+  recipe_id: string;
+  recipe: {
+    id: string;
+    title: string;
+    label: string;
+    cook_time: number;
+    rating: number;
+    photo: string;
+    user?: string;
+    profile?: string;
+  };
 }
 
-export async function addFavorite(recipeId: number) {
-  return await postAuth('/user/favorites', { recipe_id: recipeId });
-}
-
-export async function removeFavorite(recipeId: number) {
-  return await deleteAuth(`/user/favorites/${recipeId}`);
-}
-
-export const getFavorites = async (): Promise<Favorite[]> => {
-  return await getAuth('/user/favorites');
+// Ambil semua resep yang difavoritkan oleh user
+export const getFavorites = async (): Promise<FavoriteRecipe[]> => {
+  const res = await getAuth("/user/favorites");
+  return res.data; // karena backend-mu me-return di key `data`
 };
 
-export const checkFavorite = async (recipeId: number): Promise<boolean> => {
-  const response = await postAuth('/user/favorites/check', { recipe_id: recipeId });
-  return response.is_favorited;
+// Tambah ke bookmark
+export const addFavorite = async (recipeId: string): Promise<void> => {
+  await postAuth(`/user/recipes/${recipeId}/favorites`, {});
+};
+
+// Hapus dari bookmark
+export const removeFavorite = async (recipeId: string): Promise<void> => {
+  await deleteAuth(`/user/recipes/${recipeId}/favorites`);
 };
