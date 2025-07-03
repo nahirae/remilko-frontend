@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '../dashboard/components/Navbar';
-import Footer from '../dashboard/components/Footer';
+import Footer from '@/components/Footer';
 import { SquarePen } from 'lucide-react';
 import { getProfile, updateProfile, logout } from '@/lib/auth';
 

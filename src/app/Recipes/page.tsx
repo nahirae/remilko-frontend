@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import debounce from "lodash.debounce";
 import Navbar from "../dashboard/components/Navbar";
-import Footer from "../dashboard/components/Footer";
+import Footer from '@/components/Footer';
 import RecipeCard from "../dashboard/components/RecipeCard";
 import { getRecipes, type Recipe, type Pagination } from "@/lib/recipes";
 import { getFavorites } from "@/lib/favorites";

@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Navbar from '../dashboard/components/Navbar';
-import Footer from '../dashboard/components/Footer';
+import Footer from '@/components/Footer';
 import { getSearchResults, SearchResult } from '@/lib/search';
 import RecipeCard from '../dashboard/components/RecipeCard';
 

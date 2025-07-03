@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Navbar from "../dashboard/components/Navbar";
-import Footer from "../dashboard/components/Footer";
+import Footer from "@/components/Footer";
 import { ThumbsUp, Share2 } from "lucide-react";
 import { getPublicRecookFeed, type Recook } from "@/lib/recook";
 import type { Pagination } from "@/lib/recipes";

@@ -2,7 +2,6 @@
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import React, { useState } from "react";
-import axios from "axios";
 
 export default function SignUp(){
     const router = useRouter();
@@ -10,41 +9,15 @@ export default function SignUp(){
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [msg, setMsg] = useState('');
 
-
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setMsg('');
-        try{
-            const res = await axios.post('http://127.0.0.1:8000/api/register', {
-                "name": name,
-                "email": email,
-                "password": password,
-            },{
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            console.log( alert('Registrasi sukses: '), res.data);
-            if (res.data.token) {
-                localStorage.setItem('token', res.data.token);
-            }
-            router.push('/dashboard');
-        } catch(err: any){
-            const errorMessage = err.response?.data?.message || alert('Terjadi kesalahan saat registrasi.');
-            console.error('Error: ', err.response?.data || err.message);
-            setMsg(errorMessage);
-        }
+        console.log("Username:", name);
+        console.log("Email:", email);
+        console.log("Password:", password);
+        // Simulasi redirect setelah "registrasi"
+        router.push('/sidebar/dashboard');
     };
-
-    // const router = useRouter()
-    // const handleSubmit = (e) => {
-    //     console.log('submit')
-    //     e.preventDefault();
-    //     redirect("/dashboard");
-    // };
 
     return(
         <div className="min-h-screen flex flex-col bg-white text-black">
@@ -55,7 +28,7 @@ export default function SignUp(){
                 <div className="w-1/2 flex items-center justify-center">
                     <div className="text-center">
                     <img
-                        src="/asset/SignUp.png"
+                        src="/img1.jpg"
                         alt="Recipe Illustration"
                         className="mx-auto mb-4"
                     />
@@ -107,28 +80,13 @@ export default function SignUp(){
                         </button>
                         
                         <Link
-                        href="/login"
+                        href="/sign-in"
                         className="w-1/2 bg-gray-200 text-gray-700 py-2 rounded-lg text-center hover:bg-gray-300"
                         >
                             Sign In
                         </Link>
                     </div>
                     </form>
-
-                    {/* <div className="flex items-center my-4">
-                        <hr className="flex-grow border-gray-300" />
-                        <span className="px-2 text-gray-500">Atau</span>
-                        <hr className="flex-grow border-gray-300" />
-                    </div>
-
-                    <div className="flex justify-center space-x-4">
-                        <button className="p-2 border border-gray-300 rounded-full hover:bg-gray-100">
-                            <img src="https://via.placeholder.com/24?text=F" alt="Facebook" />
-                        </button>
-                        <button className="p-2 border border-gray-300 rounded-full hover:bg-gray-100">
-                            <img src="https://via.placeholder.com/24?text=G" alt="Google" />
-                        </button>
-                    </div> */}
                 </div>
                 </div>
             </div>

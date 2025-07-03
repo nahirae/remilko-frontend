@@ -5,7 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 // Impor komponen UI
 import Navbar from "@/app/dashboard/components/Navbar";
-import Footer from "@/app/dashboard/components/Footer";
+import Footer from "@/components/Footer";
 import CookingSteps from "./CookingSteps";
 import PreviewRecook from "./PreviewRecook";
 import Comentar from "./Comentar";

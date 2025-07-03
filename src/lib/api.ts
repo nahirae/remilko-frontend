@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: "http://localhost:8000/api",
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
@@ -65,8 +65,26 @@ export const apiRequest = async (method: string, url: string, data: any = null, 
   }
 };
 
-// --- Helper Methods ---
-export const getAuth = (url: string, config = {}) => apiRequest("get", url, null, true, config);
-export const postAuth = (url: string, data: any, config = {}) => apiRequest("post", url, data, true, config);
-export const putAuth = (url: string, data: any, config = {}) => apiRequest("put", url, data, true, config);
-export const deleteAuth = (url: string, config = {}) => apiRequest("delete", url, null, true, config);
+export default api;
+
+// ========== Helper Methods ==========
+
+// GET
+export const getNoAuth = (url, config = {}) => apiRequest("get", url, null, false, config);
+export const getAuth = (url, config = {}) => apiRequest("get", url, null, true, config);
+
+// POST
+export const postNoAuth = (url, data, config = {}) => apiRequest("post", url, data, false, config);
+export const postAuth = (url, data, config = {}) => apiRequest("post", url, data, true, config);
+
+// PUT
+export const putNoAuth = (url, data, config = {}) => apiRequest("put", url, data, false, config);
+export const putAuth = (url, data, config = {}) => apiRequest("put", url, data, true, config);
+
+// PATCH
+export const patchNoAuth = (url, data, config = {}) => apiRequest("patch", url, data, false, config);
+export const patchAuth = (url, data, config = {}) => apiRequest("patch", url, data, true, config);
+
+// DELETE
+export const deleteNoAuth = (url, config = {}) => apiRequest("delete", url, null, false, config);
+export const deleteAuth = (url, config = {}) => apiRequest("delete", url, null, true, config);

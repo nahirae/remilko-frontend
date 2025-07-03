@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Navbar from "../dashboard/components/Navbar";
-import Footer from "../dashboard/components/Footer";
+import Footer from "@/components/Footer";
 import { postAuth } from "@/lib/api";
 import toast, { Toaster } from "react-hot-toast";
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Navbar from "../dashboard/components/Navbar";
-import Footer from "../dashboard/components/Footer";
+import Footer from "@/components/Footer";
 import { getFavorites, FavoriteRecipe } from "@/lib/favorites";
 import RecipeCard from "@/app/dashboard/components/RecipeCard";
 
